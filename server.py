@@ -1,17 +1,25 @@
 import falcon
 import json
-import sebastian
+from sebastian.src.ChoraleAnalysis.ChoraleAnalysis import XMLChoraleAnalysis
 
 class SebastianResource:
-	def on_get(self, req, resp):
-		resp.status = falcon.HTTP_200
-		resp.body = ('Some text')
 
 	def on_post(self, req, resp):
+		resp.status = falcon.HTTP_200
+		params = json.loads(req.stream.read())
+		analysis = XMLChoraleAnalysis(params['chorale'])
+		analysis.analyze()
+		error_list = analysis.get_error_list_all()
+
+		out = {'errors': []}
+		for error in error_list:
+			out['errors'].append(error.message)
+
+		resp.body = json.dumps(out)
 
 
-app = falcon.API()
+application = falcon.API()
 
 checker = SebastianResource()
 
-app.add_route('/check', checker)
+application.add_route('/check', checker)

@@ -2,6 +2,7 @@
 Jigglypuff
 ==========
 
+Jigglypuff is a Falcon/Gunicorn HTTP API for using the Sebastian library.  It is meant to be deployed as a group of Docker containers.
 
 ======
 

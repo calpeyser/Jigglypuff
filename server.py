@@ -5,6 +5,8 @@ from sebastian.src.ChoraleAnalysis.ChoraleAnalysis import XMLChoraleAnalysis
 class SebastianResource:
 
 	def on_post(self, req, resp):
+		print "Sebastian request recieved"
+
 		resp.status = falcon.HTTP_200
 		params = json.loads(req.stream.read())
 		analysis = XMLChoraleAnalysis(params['chorale'])
@@ -17,9 +19,22 @@ class SebastianResource:
 
 		resp.body = json.dumps(out)
 
+class MockResource:
+
+	def on_post(self, req, resp):
+		print "Mock request recieved"	
+		resp.status = falcon.HTTP_200
+		resp.body = "hello!"
+
+	def on_get(self, req, resp):
+		print "Mock request recieved"	
+		resp.status = falcon.HTTP_200
+		resp.body = "hello!"
 
 application = falcon.API()
 
+mock = MockResource()
 checker = SebastianResource()
 
+application.add_route('/', mock)
 application.add_route('/check', checker)

@@ -12,8 +12,10 @@ class SebastianResource:
 		analysis = XMLChoraleAnalysis(params['chorale'])
 		analysis.analyze()
 		error_list = analysis.get_error_list_all()
+		annotated_chorale_xml_path = analysis.get_annotated_chorale().score.write('musicxml')
+		annotated_chorale_xml = open(annotated_chorale_xml_path, 'rb').read()
 
-		out = {'errors': []}
+		out = {'errors': [], 'chorale': annotated_chorale_xml}
 		for error in error_list:
 			out['errors'].append(error.message)
 
